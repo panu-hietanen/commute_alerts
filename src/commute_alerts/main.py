@@ -7,8 +7,8 @@ from utils.start import load_env
 
 
 def main():
-    load_env()
     print("Commute Alerts Service is running...")
+    load_env()
 
     # FORMAT: {'home': (lat, long), 'work1': (lat, long), ...}
     coord_file = os.getenv('COORD_FILE')
@@ -20,7 +20,12 @@ def main():
 
     gmaps = gm.Client(key=os.getenv('GMAPS_API_KEY'))
 
-    print(coords)
+    home_addr = gmaps.reverse_geocode(coords['home'])
+    work_addrs = [gmaps.reverse_geocode(coords[f'work{i+1}']) for i in range(n_work)]
+
+    print(home_addr[0]['formatted_address'])
+    for i, addr in enumerate(work_addrs):
+        print(f"Work {i+1}: {addr[0]['formatted_address']}")
 
 if __name__ == "__main__":
     main()
