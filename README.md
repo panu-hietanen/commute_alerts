@@ -4,3 +4,5 @@ A concept for an app that can alert you about your daily commute. Aimed at peopl
 
 # Current requirements (2026-01-24)
 - Python 3.12.0
+- dotenv
+- googlemaps
