@@ -5,6 +5,7 @@ import googlemaps as gm
 from utils.data import read_csv
 from utils.start import load_env
 
+from integrations.google_routes import GoogleRoutes
 
 def main():
     print("Commute Alerts Service is running...")
@@ -18,14 +19,15 @@ def main():
     coords = read_csv(coord_file)
     n_work = len(coords) - 1
 
-    gmaps = gm.Client(key=os.getenv('GMAPS_API_KEY'))
+    g = GoogleRoutes(api_key=os.getenv('GMAPS_API_KEY'))
 
-    home_addr = gmaps.reverse_geocode(coords['home'])
-    work_addrs = [gmaps.reverse_geocode(coords[f'work{i+1}']) for i in range(n_work)]
+    dir = g.get_travel_time(
+        origin=coords['home'],
+        destination=coords['work1'],
+        format='text'
+    )
 
-    print(home_addr[0]['formatted_address'])
-    for i, addr in enumerate(work_addrs):
-        print(f"Work {i+1}: {addr[0]['formatted_address']}")
+    print(f"Travel time to work1: {dir}")
 
 if __name__ == "__main__":
     main()
