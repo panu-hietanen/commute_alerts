@@ -6,6 +6,7 @@ from utils.data import read_csv
 from utils.start import load_env
 
 from integrations.google_routes import GoogleRoutes
+from integrations.web_requests import WazeClient
 
 def main():
     print("Commute Alerts Service is running...")
@@ -20,6 +21,7 @@ def main():
     n_work = len(coords) - 1
 
     g = GoogleRoutes(api_key=os.getenv('GMAPS_API_KEY'))
+    w = WazeClient(api_key=os.getenv('X_API_KEY'))
 
     dir = g.get_travel_time(
         origin=coords['home'],
